@@ -1,17 +1,18 @@
 #include <Audio.h>
 #include <Wire.h>
 #include <SPI.h>
-#include <SD.h>
+//#include <SD.h>
 #include <SerialFlash.h>
 #include <Bounce.h>
 
 
-AudioInputI2S            audioInput;
-AudioOutputI2S           i2s1;
-AudioConnection          patchCord2(audioInput, 0, i2s1, 0);
-AudioConnection          patchCord3(audioInput, 1, i2s1, 1);
-AudioControlSGTL5000     sgtl5000_1;
-
+// GUItool: begin automatically generated code
+AudioInputI2S            i2s2;           //xy=331.8833312988281,475.88330078125
+AudioOutputI2S           i2s1;           //xy=603.88330078125,471.0833435058594
+AudioConnection          patchCord1(i2s2, 0, i2s1, 0);
+AudioConnection          patchCord2(i2s2, 1, i2s1, 1);
+AudioControlSGTL5000     sgtl5000_1;     //xy=480.8833312988281,555.0833129882812
+// GUItool: end automatically generated code
 // init buttons
 Bounce button0 = Bounce(4, 15); // 15ms bounce time
 Bounce button1 = Bounce(5, 15);
@@ -26,6 +27,8 @@ void setup() {
   Serial.begin(9600);
   pinMode(4, INPUT_PULLUP);
   pinMode(5, INPUT_PULLUP);
+
+  AudioMemory(12);
   sgtl5000_1.enable();
   sgtl5000_1.inputSelect(myInput);
   sgtl5000_1.volume(0.8); // caution: very loud
