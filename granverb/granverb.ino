@@ -29,7 +29,7 @@ int granfreezestate = 0;
 
 void setup() {
   // put your setup code here, to run once:
-//  Serial.begin(9600);
+  //  Serial.begin(9600);
   pinMode(4, INPUT_PULLUP);
   pinMode(5, INPUT_PULLUP);
   //  pinMode(2, INPUT_PULLUP);
@@ -46,12 +46,12 @@ void setup() {
   sgtl5000_1.inputSelect(myInput);
   sgtl5000_1.volume(0.8); // caution: very loud - use oscilloscope only!
   sgtl5000_1.lineOutLevel(13); //13 loudest, 31 quietest
-  sgtl5000_1.lineInLevel(12); //0 least sensitive, 15 most sensitive
+  sgtl5000_1.lineInLevel(6); //0 least sensitive, 15 most sensitive
   // Confirgure both to use "myWaveform" for WAVEFORM_ARBITRARY
   // the Granular effect requires memory to operate
   granular1.begin(granularMemory, GRANULAR_MEMORY_SIZE);
 }
-
+int count = 0;
 void loop() {
   // put your main code here, to run repeatedly:
   button0.update();
@@ -68,39 +68,51 @@ void loop() {
 
 
 
+
+/////Granular code
+
   // Button 0 starts Freeze effect
   if (button0.fallingEdge()) {
     if (granfreezestate == 1) {
-//      Serial.println("stopfreeze");
+      //      Serial.println("stopfreeze");
       granular1.stop();
       granfreezestate = 0;
     } else {
-//      Serial.println("startfreeze");
+      //      Serial.println("startfreeze");
       granfreezestate = 1;
-      float msec = 100.0 + (knob_A6 * 190.0);
+      float msec = 100.0 + (knob_A6 * 172.0);
       granular1.beginFreeze(msec);
     }
   }
   if (button1.fallingEdge()) {
     if (granfreezestate == 2) {
-//      Serial.println("stoppitch");
+      //      Serial.println("stoppitch");
       granular1.stop();
       granfreezestate = 0;
     } else {
-//      Serial.println("startpitch");
+      //      Serial.println("startpitch");
       granfreezestate = 2;
-    float msec = 25.0 + (knob_A6 * 75.0);
-    granular1.beginPitchShift(msec);
+      float msec = 25.0 + (knob_A6 * 75.0);
+      granular1.beginPitchShift(msec);
     }
   }
 
-  
-  // Continuously adjust the speed, based on the A3 pot
+
+  // Continuously adjust the speed, based on the A6 pot
   float ratio;
-//  ratio = powf(2.0, knob_A6 * 2.0 - 1.0); // 0.5 to 2.0
+  //  ratio = powf(2.0, knob_A6 * 2.0 - 1.0); // 0.5 to 2.0
   ratio = powf(2.0, knob_A6 * 6.0 - 3.0); // 0.125 to 8.0 -- uncomment for far too much range!
   granular1.setSpeed(ratio);
 
-//  Serial.println(String(knob_A2) + " " + String(knob_A3) + " " + String(knob_A6));
+
+//  count++;
+//  if (count > 1500) {
+//    //    Serial.print(String(knob_A2) + " " + String(knob_A3) + " " + String(knob_A6));
+//    Serial.println("knobs");
+//    Serial.println(knob_A2 );
+//    Serial.println(knob_A3 );
+//    Serial.println(knob_A6 );
+//    count = 0;
+//  }
 
 }
